@@ -21,10 +21,6 @@ namespace EliteBackend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(string id)
         {
-            if (!IsUserIDValid(id))
-            {
-                return BadRequest("Invalid user ID");
-            }
             var user = await _db.GetUserByUsername(id);
 
             if (user is null)
@@ -54,16 +50,12 @@ namespace EliteBackend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpadateUser(string id, [FromBody] User updatedUser)
         {
-            if (!IsUserIDValid(id))
-            {
-                return BadRequest("Invalid user ID");
-            }
-            if ((updatedUser.Sex != null) && IsSexValueValid(updatedUser.Sex))
+            if ((updatedUser.Sex != null) && !IsSexValueValid(updatedUser.Sex))
             {
                 return BadRequest("Invalid sex type: Should be MALE or FEMALE");
             }
 
-            var userExist = await _db.GetUser(id);
+            var userExist = await _db.GetUserByUsername(id);
 
             if (userExist is null)
             {
@@ -86,7 +78,7 @@ namespace EliteBackend.Controllers
                 return BadRequest("Invalid user ID");
             }
 
-            var user = await _db.GetUser(id);
+            var user = await _db.GetUserByUsername(id);
 
             if (user is null)
             {
@@ -113,7 +105,7 @@ namespace EliteBackend.Controllers
 
         private bool IsSexValueValid(String sex)
         {
-            return sex.Equals("MALE") || sex.Equals("FEMALE");
+            return sex.ToUpper().Equals("MALE") || sex.ToUpper().Equals("FEMALE");
         }
     }
 }
