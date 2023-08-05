@@ -26,7 +26,7 @@ namespace EliteBackend.Services
 
         public async Task Updateuser(string id, User user) => await _User.ReplaceOneAsync(x => x.Email == id, user);
 
-        public async Task RemoveUser(string id) => await _User.DeleteOneAsync(x => x.Id == id);
+        public async Task RemoveUser(string id) => await _User.DeleteOneAsync(x => x.Email == id);
 
     }
 }

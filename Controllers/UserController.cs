@@ -69,14 +69,9 @@ namespace EliteBackend.Controllers
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-
-            if (!IsUserIDValid(id))
-            { 
-                return BadRequest("Invalid user ID");
-            }
 
             var user = await _db.GetUserByUsername(id);
 
